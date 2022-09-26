@@ -9,3 +9,36 @@ body {
     left: 0;
     top: 0;
 }
+
+#board {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 200px;
+    width: 400px;
+    display: flex;
+    background: rgba(22,22,22,0.5);
+    border-radius: 0  0 0 20px;
+    border: 2px solid black;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: space-around;
+}
+
+.button-runner{
+    display: inline-block;
+    opacity: 1;
+    width: 90px;
+    height: 30px;
+    margin: 10px;
+    border-radius: 8px;
+    background-color: #ceb3e7;
+}
+
+.button-runner:hover{
+    background-color: #dafcbf;
+}
+
+.button-runner:active{
+    background-color: lawngreen;
+}
