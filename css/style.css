@@ -18,7 +18,7 @@ body {
     width: 400px;
     display: flex;
     background: rgba(22,22,22,0.5);
-    border-radius: 0  0 0 20px;
+    border-radius: 0 0 0 20px;
     border: 2px solid black;
     justify-content: center;
     flex-wrap: wrap;
@@ -41,4 +41,36 @@ body {
 
 .button-runner:active{
     background-color: lawngreen;
+}
+
+#trains-search-wrapper{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100px;
+    width: 400px;
+    background: rgba(22,22,22,0.5);
+    border-radius: 0 0 20px 0;
+    border: 2px solid black;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: row;
+}
+
+#trains-search-wrapper label{
+    font-size: 40px;
+}
+
+#trains-search-wrapper select{
+    font-size: 13px;
+    font-weight: bolder;
+    border-radius: 10px;
+    height: 40px;
+    background-color: #ceb3e7;
+}
+
+#trains-search-wrapper select:hover{
+    background-color: #dafcbf;
 }

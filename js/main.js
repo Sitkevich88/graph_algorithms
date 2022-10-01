@@ -40,31 +40,6 @@ const table = [
     ['Уфа', 'Самара', 461], //last
 ];
 
-const cities = table.map(arr=>arr.slice(0, -1))
-    .flatMap(city => city)
-    .sort()
-    .filter((city, i, nonUniqueCities)=>{
-        return city !== nonUniqueCities[i+1];
-    });
-
-const graph = {};
-
-table.forEach(trainLine => {
-    //editing graph object
-    const city1 = trainLine[0];
-    const city2 = trainLine[1];
-    if (!graph.hasOwnProperty(city1))
-        graph[city1] = [];
-    if (!graph.hasOwnProperty(city2))
-        graph[city2] = [];
-    if (!graph[city1].includes(city2))
-        graph[city1].push(city2);
-    if (!graph[city2].includes(city1))
-        graph[city2].push(city1);
-});
-
-console.log(graph);
-
 const positions = {
     "Брест":{x:-99, y:365},
     "Вильнюс":{x:41, y:220},
@@ -94,6 +69,31 @@ const positions = {
     "Харьков":{x:536, y:385},
     "Ярославль":{x:819, y:114}
 };
+
+const cities = table.map(arr=>arr.slice(0, -1))
+    .flatMap(city => city)
+    .sort()
+    .filter((city, i, nonUniqueCities)=>{
+        return city !== nonUniqueCities[i+1];
+    });
+
+const graph = {};
+
+table.forEach(trainLine => {
+    //editing graph object
+    const city1 = trainLine[0];
+    const city2 = trainLine[1];
+    if (!graph.hasOwnProperty(city1))
+        graph[city1] = [];
+    if (!graph.hasOwnProperty(city2))
+        graph[city2] = [];
+    if (!graph[city1].includes(city2))
+        graph[city1].push(city2);
+    if (!graph[city2].includes(city1))
+        graph[city2].push(city1);
+});
+
+console.log(graph);
 
 const elements = {
     nodes: cities.map(city => {
@@ -144,6 +144,14 @@ const cy = cytoscape({
         })
         .selector('.end')
         .style({
+            'background-color': '#63bd7f',
+            'line-color': '#63bd7f',
+            'target-arrow-color': '#63bd7f',
+            'transition-property': 'background-color, line-color, target-arrow-color',
+            'transition-duration': '0.5s'
+        })
+        .selector('.path')
+        .style({
             'background-color': '#1c0a1c',
             'line-color': '#1c0a1c',
             'target-arrow-color': '#1c0a1c',
@@ -159,6 +167,20 @@ const cy = cytoscape({
 
 const nodes = cy.nodes();
 const edges = cy.edges();
+
+const selectors = document.querySelectorAll('.city-selector');
+
+cities.forEach(city => {
+   const option = document.createElement('option');
+   option.value = city;
+   option.text = city;
+   selectors.forEach(selector => {
+      selector.appendChild(option.cloneNode(true));
+   });
+});
+
+selectors[0].children[0].selected="selected";
+selectors[1].children[1].selected="selected";
 
 function getNodeId(city){
     for (let i = 0; i < cities.length; i++) {
@@ -200,11 +222,21 @@ function colourEndNode(city){
     nodes[getNodeId(city)].addClass('end');
 }
 
+function colourPathNode(city){
+    nodes[getNodeId(city)].addClass('path');
+}
+
+function colourPathEdge(city1, city2){
+    edges[getEdgeId(city1, city2)].addClass('path');
+}
+
 function colourPath(path){
-    for (let i = 1; i < path.length; i++) {
-        colourEndNode(path[i]);
-        colourEndEdge(path[i-1], path[i]);
+    const max = path.length - 1;
+    for (let i = 1; i < max; i++) {
+        colourPathNode(path[i]);
+        colourPathEdge(path[i-1], path[i]);
     }
+    colourPathEdge(path[max-1], path[max]);
 }
 
 function clear(){
@@ -212,9 +244,12 @@ function clear(){
         node.removeClass('start');
         node.removeClass('new');
         node.removeClass('end');
+        node.removeClass('path');
     });
     edges.forEach(edge => {
+       edge.removeClass('start');
        edge.removeClass('new');
        edge.removeClass('end');
+       edge.removeClass('path');
     });
 }

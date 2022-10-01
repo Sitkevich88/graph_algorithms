@@ -1,6 +1,15 @@
-const city1 = 'Рига';
-const city2 = 'Одесса';
+let city1 = selectors[0].value;
+let city2 = selectors[1].value;
 const l = 5;
+
+
+selectors[0].addEventListener('change', function () {
+    city1 = selectors[0].value;
+});
+
+selectors[1].addEventListener('change', function () {
+    city2 = selectors[1].value;
+});
 
 document.querySelector('#button8').addEventListener('click', function (){
     clear();
