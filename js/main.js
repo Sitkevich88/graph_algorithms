@@ -65,12 +65,46 @@ table.forEach(trainLine => {
 
 console.log(graph);
 
+const positions = {
+    "Брест":{x:-99, y:365},
+    "Вильнюс":{x:41, y:220},
+    "Витебск":{x:539, y:267},
+    "Волгоград":{x:826, y:658},
+    "Воронеж":{x:657, y:570},
+    "Даугавпилс":{x:258, y:108},
+    "Донецк":{x:569, y:466},
+    "Житомир":{x:116, y:438},
+    "Казань":{x:1133, y:238},
+    "Калининград":{x:-200, y:171},
+    "Каунас":{x:9, y:102},
+    "Киев":{x:315, y:355},
+    "Кишинев":{x:-24, y:651},
+    "Минск":{x:231, y:198},
+    "Москва":{x:710, y:200},
+    "Мурманск":{x:610, y:-168},
+    "Ниж.Новгород":{x:995, y:168},
+    "Одесса":{x:161, y:695},
+    "Орел":{x:837, y:336},
+    "Рига":{x:138, y:50},
+    "С.Петербург":{x:607, y:9},
+    "Самара":{x:1157, y:387},
+    "Симферополь":{x:320, y:672},
+    "Таллинн":{x:351, y:1},
+    "Уфа":{x:1296, y:323},
+    "Харьков":{x:536, y:385},
+    "Ярославль":{x:819, y:114}
+};
+
 const elements = {
-    nodes: cities.map((city, i) => {
-        return {
-            data: { id: city },
-            //position: { x: 30*i, y: 150 + Math.random()*300 }
+    nodes: cities.map(city => {
+        const node = {
+            data: { id: city }
         };
+        const position = positions[city];
+        if (position !== undefined)
+            node.position = position;
+
+        return node;
     }),
     edges: table.map(line => {
         return { data: { id: line[0]+line[1], weight: line[2], source: line[0], target: line[1]} };
@@ -119,11 +153,11 @@ const cy = cytoscape({
 
     elements: elements,
     layout: {
-        name: 'breadthfirst',
+        name: 'preset',
     }
 });
 
-const nodes = cy.elements();
+const nodes = cy.nodes();
 const edges = cy.edges();
 
 function getNodeId(city){
